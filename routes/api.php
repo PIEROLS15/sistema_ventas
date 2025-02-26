@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\SaleReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,3 +38,5 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->post('/sales', [SaleController::class, 'store']);
+
+Route::middleware(['auth:sanctum'])->get('/sales_report', [SaleReportController::class, 'generateReport']);
