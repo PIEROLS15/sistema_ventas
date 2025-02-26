@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Gate;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -73,9 +74,9 @@ class ProductController extends Controller
     // Eliminar un producto
     public function destroy($id)
     {
-        // if (Gate::denies('vendedor')) {
-        //     return response()->json(['error' => 'Acceso denegado'], 403);
-        // }
+        if (Gate::denies('administrador')) {
+            return response()->json(['error' => 'No tienes permiso para realizar esta acción'], 403);
+        }
         
         $product = Product::find($id);
 
