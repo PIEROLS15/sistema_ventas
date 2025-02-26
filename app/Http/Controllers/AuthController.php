@@ -16,23 +16,26 @@ class AuthController extends Controller
             'apellido' => 'required|string|max:255',
             'correo' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
-            'role' => 'required|in:administrador,vendedor',
+            'role_id' => 'required|exists:roles,id',
         ]);
-
+    
         $user = User::create([
             'nombre' => $request->nombre,
             'apellido' => $request->apellido,
             'correo' => $request->correo,
-            'password' => Hash::make($request->password),
-            'role' => $request->role
+            'password' => bcrypt($request->password),
+            'role_id' => $request->role_id,
         ]);
 
-        if (!$user) {
-            return response()->json(['message' => 'Error al registrar usuario', 'user' => $user], 500);
-        }
+        $token = $user->createToken('authToken')->plainTextToken;
 
-        return response()->json(['message' => 'Usuario registrado con éxito'], 201);
+        return response()->json([
+            'user' => $user->load('role'),
+            'token' => $token,
+            'role' => $user->role->name
+        ], 201);
     }
+
 
     // Inicio de sesión
     public function login(Request $request)
