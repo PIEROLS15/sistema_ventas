@@ -7,60 +7,86 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## Sistema de ventas
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Este proyecto es una aplicación desarrollada en Laravel para la gestión de ventas. Permite registrar ventas, generar reportes en diferentes formatos y administrar el sistema con control de roles y permisos.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Instalación y configuración
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Requisitos previos
+- [Laragon](https://laragon.org/download/).
+- [MySQL Workbench para administración de la base de datos](https://dev.mysql.com/downloads/workbench/).
+- [Composer](https://getcomposer.org/).
+- [Visual Studio Code](https://code.visualstudio.com/download).
+- [Postman para las pruebas de API](https://www.postman.com/downloads/).
 
-## Learning Laravel
+## Pasos para ejecutar el proyecto
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Clonar el repositorio
+Se debe clonar el repositorio dentro de la carpeta root de laragon 
+- git clone https://github.com/PIEROLS15/sistema_ventas.git
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Configurar Laragon
+Se debe activar extensión zip dentro de PHP
+- Dentro de laragon, Menú>PHP>extensions>zip
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Instalar dependecias
+Dentro del terminal de Laragon, entramos a la carpeta del proyecto clonado y ejecutamos:
+- composer install
 
-## Laravel Sponsors
+### Configurar entorno
+Ejecutamos en la terminal de laragon:
+- cp .env.example .env
+- En el archivo .env que se creó configuramos los datos de conexión a la base de datos
+  
+### Conexión
+- DB_CONNECTION=mysql
+- DB_HOST=127.0.0.1
+- DB_PORT=3306
+- DB_DATABASE=sistemas_ventas
+- DB_USERNAME=root
+- DB_PASSWORD=
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Ejecutamos migraciones
+Sincronizamos las migraciones a la base de datos:
+- php artisan migrate --seed
 
-### Premium Partners
+### Iniciar el servidor
+Para correr el progrmama ejecutamos:
+- php artisan serve
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Configuración de POSTMAN
+- Dentro de Postman importamos el archivo Sistema_ventas.postman_collection.json
+- Una vez cargada la collection, editamos el valor de la variable {{baseUrl}}
 
-## Contributing
+### Descargar reportes xlsx desde Postman
+- En el endpoint sales report dentro de params editamos el formato a xlsx
+- Al darle send se mostrará un status 200, en save response damos a la opcion Save response to file
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Decisiones técnicas clave
 
-## Code of Conduct
+### Arquitectura
+- Se sigue el principio SRP (Single Responsibility Principle) separando lógica en controladores, servicios y repositorios.
+- Se utiliza Eloquent ORM para optimización de consultas SQL.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Seguridad y roles
+- Se implementó los permisos por roles según los requerimientos funcionales solicitados
+- Se implementó sanctum ya que permite generar tokens de API simples, lo cual es ideal para aplicaciones internas.
 
-## Security Vulnerabilities
+### Reporte de ventas
+- Se pueden generar reportes en JSON y XLSX.
+- Se aplican filtros por rango de fechas.
+- Se usa la librería Maatwebsite Excel para la exportación a Excel.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Base de datos y relaciones
+El sistema usa MySQL como gestor de base de datos, con la siguiente estructura de tablas clave:
+- Users: Almacena los datos del usuario con su rol.
+- Roles: Almacena los tipos de roles que existen en el sistema (Administrador, vendedor)
+- Products: Almacena los datos de cada producto
+- Identificaciones: Define los tipos de identificación (DNI, RUC).
+- Sales: Registra la venta con cliente, monto total y fecha.
+- Sale_Details: Almacena los productos vendidos en cada venta.
 
-## License
+### Diagrama ERD
+![image](https://github.com/user-attachments/assets/28de0de5-ec37-416c-9706-48d6ae76a878)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
