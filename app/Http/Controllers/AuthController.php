@@ -16,7 +16,7 @@ class AuthController extends Controller
             'apellido' => 'required|string|max:255',
             'correo' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
-            'role_id' => 'required|exists:roles,id',
+            'role_id' => 'nullable|exists:roles,id',
         ]);
     
         $user = User::create([
@@ -24,7 +24,7 @@ class AuthController extends Controller
             'apellido' => $request->apellido,
             'correo' => $request->correo,
             'password' => bcrypt($request->password),
-            'role_id' => $request->role_id,
+            'role_id' => $request->role_id ?? 2,
         ]);
 
         $token = $user->createToken('authToken')->plainTextToken;

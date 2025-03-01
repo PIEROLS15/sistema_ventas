@@ -33,12 +33,16 @@ class Handler extends ExceptionHandler
         });
     }
 
-    public function render($request, Throwable $exception):JsonResponse
+    public function render($request, Throwable $exception): JsonResponse
     {
         if ($exception instanceof AuthenticationException) {
             return response()->json(['error' => 'Acceso no autorizado, por favor inicie sesión'], 401);
         }
 
-        return parent::render($request, $exception);
+        return response()->json([
+            'error' => 'Ocurrió un error inesperado.',
+            'message' => $exception->getMessage(),
+        ], 500);
     }
+
 }
