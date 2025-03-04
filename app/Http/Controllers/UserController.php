@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -47,7 +48,7 @@ class UserController extends Controller
         }
     }
     
-    //Actualizar usuario si es su propia cuenta, admin puede actualizar cualquiera
+    //Actualizar usuario si es su propia cuenta, usuario administrador puede actualizar cualquiera
     public function update(Request $request, $id)
     {
         try {
@@ -109,6 +110,24 @@ class UserController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+    //Eliminar usuario, solo con rol administrador
+    public function destroy($id)
+    {
+        if (Gate::denies('administrador')) {
+            return response()->json(['error' => 'No tienes permiso para realizar esta acción'], 403);
+        }
+
+        $user = User::find($id); 
+
+        if (!$user) {
+            return response()->json(['error' => 'Usuario no encontrado'], 404);
+        }
+
+        $user->delete();
+
+        return response()->json(['message' => 'Usuario eliminado correctamente'], 200);
     }
     
 }
