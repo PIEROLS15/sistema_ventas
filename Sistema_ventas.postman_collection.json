@@ -27,7 +27,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nombre\": \"Piero\",\r\n    \"apellido\": \"Llanos\",\r\n    \"correo\": \"piero@example.com\",\r\n    \"password\": \"123456\",\r\n    \"role_id\": 2\r\n}",
+							"raw": "{\r\n    \"nombre\": \"Jose\",\r\n    \"apellido\": \"Llanos\",\r\n    \"correo\": \"jose1@example.com\",\r\n    \"password\": \"123456\"\r\n    // \"role_id\": 2\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -72,7 +72,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"correo\": \"piero@example.com\",\r\n    \"password\": \"123456\"\r\n}",
+							"raw": "{\r\n    //administrador\r\n    \"correo\": \"pierodanielllanossanchez@gmail.com\",\r\n    \"password\": \"123456\"\r\n}\r\n// {\r\n//     //vendedor\r\n//     \"correo\": \"piero1@example.com\",\r\n//     \"password\": \"1234567\"\r\n// }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -133,6 +133,64 @@
 								"logout"
 							]
 						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "users list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "update user",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/users/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete user",
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}
@@ -390,7 +448,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/sales_report?start_date=2025-02-01&end_date=2025-02-27&format=json",
+							"raw": "{{baseUrl}}/api/sales_report?start_date=2025-02-01&end_date=2025-02-27&format=xlsx",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -409,7 +467,7 @@
 								},
 								{
 									"key": "format",
-									"value": "json"
+									"value": "xlsx"
 								}
 							]
 						}
@@ -417,6 +475,16 @@
 					"response": []
 				}
 			]
+		}
+	],
+	"variable": [
+		{
+			"key": "authToken",
+			"value": ""
+		},
+		{
+			"key": "userRole",
+			"value": ""
 		}
 	]
 }
