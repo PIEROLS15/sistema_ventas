@@ -12,11 +12,14 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'nombre' => 'required|string|max:255',
-            'apellido' => 'required|string|max:255',
+            'nombre' => ['required', 'string', 'max:255', 'not_regex:/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/'],
+            'apellido' => ['required', 'string', 'max:255', 'not_regex:/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/'],
             'correo' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
             'role_id' => 'nullable|exists:roles,id',
+        ],[
+            'nombre.not_regex' => 'El nombre no puede contener números ni caracteres especiales.',
+            'apellido.not_regex' => 'El apellido no puede contener números ni caracteres especiales.',
         ]);
     
         $user = User::create([
